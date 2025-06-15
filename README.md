@@ -1,6 +1,12 @@
-# Welcome to your Expo app 👋
+# The Sudoku Two 🧩
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A Sudoku game pet project built with [Expo](https://expo.dev).
+
+## Features
+
+- **New Game**: Select board size (4x4, 6x6, or 9x9) and start a fresh puzzle
+- **History**: Continue your last game and view playing statistics
+- **Settings**: Customize your game experience
 
 ## Get started
 
