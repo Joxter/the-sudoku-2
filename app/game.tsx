@@ -1,10 +1,38 @@
-import { View, Text, Button, Animated } from 'react-native';
+import { View, Text, Animated } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useState, useRef, useEffect } from 'react';
+import { SudokuGrid } from '../components/SudokuGrid';
+import { GameButton } from '../components/GameButton';
+import { Colors, CommonStyles, Spacing } from '../constants/Styles';
+
+// Simple 4x4 example puzzle
+const createEmptyGrid = (size: number) => 
+  Array(size).fill(null).map(() => Array(size).fill(null));
+
+const createFixedCells = (size: number) => 
+  Array(size).fill(null).map(() => Array(size).fill(false));
+
+// Simple 4x4 puzzle for demo
+const samplePuzzle = [
+  [1, null, 3, null],
+  [null, 2, null, 4],
+  [3, null, 1, null],
+  [null, 4, null, 2]
+];
+
+const sampleFixed = [
+  [true, false, true, false],
+  [false, true, false, true],
+  [true, false, true, false],
+  [false, true, false, true]
+];
 
 export default function Game() {
   const router = useRouter();
   const [showWinPopup, setShowWinPopup] = useState(false);
+  const [grid, setGrid] = useState(samplePuzzle);
+  const [fixedCells] = useState(sampleFixed);
+  const [selectedCell, setSelectedCell] = useState<{row: number; col: number} | null>(null);
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
 
@@ -39,17 +67,55 @@ export default function Game() {
     }
   }, [showWinPopup]);
 
+  const handleCellPress = (row: number, col: number) => {
+    if (!fixedCells[row][col]) {
+      setSelectedCell({row, col});
+    }
+  };
+
+  const handleNumberInput = (number: number) => {
+    if (selectedCell && !fixedCells[selectedCell.row][selectedCell.col]) {
+      const newGrid = [...grid];
+      newGrid[selectedCell.row][selectedCell.col] = number;
+      setGrid(newGrid);
+    }
+  };
+
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
-      <Text style={{ fontSize: 24, marginBottom: 20 }}>Game</Text>
-      <Button 
-        title="Show Win Popup" 
-        onPress={() => setShowWinPopup(true)}
+    <View style={[CommonStyles.container, CommonStyles.centered]}>
+      <Text style={{ fontSize: 24, marginBottom: Spacing.lg, color: Colors.black }}>
+        Sudoku 4x4
+      </Text>
+      
+      <SudokuGrid
+        grid={grid}
+        selectedCell={selectedCell}
+        fixedCells={fixedCells}
+        onCellPress={handleCellPress}
+        size={4}
       />
-      <View style={{ marginTop: 20 }}>
-        <Button 
+
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: Spacing.lg, gap: Spacing.sm }}>
+        {[1, 2, 3, 4].map((num) => (
+          <GameButton
+            key={num}
+            title={num.toString()}
+            onPress={() => handleNumberInput(num)}
+            style={{ minWidth: 60 }}
+          />
+        ))}
+      </View>
+
+      <View style={{ marginTop: Spacing.lg, gap: Spacing.sm }}>
+        <GameButton 
+          title="Show Win Popup" 
+          onPress={() => setShowWinPopup(true)}
+          variant="secondary"
+        />
+        <GameButton 
           title="Back to New Game" 
           onPress={() => router.push('/(tabs)/new-game')}
+          variant="outline"
         />
       </View>
 
@@ -69,30 +135,29 @@ export default function Game() {
             top: '30%',
             left: '10%',
             right: '10%',
-            backgroundColor: 'white',
-            padding: 20,
-            borderRadius: 10,
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.25,
-            shadowRadius: 4,
-            elevation: 5,
+            backgroundColor: Colors.white,
+            padding: Spacing.lg,
+            borderRadius: Spacing.sm,
+            ...CommonStyles.shadow,
             alignItems: 'center',
             opacity: fadeAnim,
             transform: [{ scale: scaleAnim }],
           }}>
-            <Text style={{ fontSize: 20, marginBottom: 15 }}>🎉 You Win! 🎉</Text>
-            <Button 
+            <Text style={{ fontSize: 20, marginBottom: Spacing.md, color: Colors.black }}>
+              🎉 You Win! 🎉
+            </Text>
+            <GameButton 
               title="New Game" 
               onPress={() => {
                 setShowWinPopup(false);
                 router.push('/(tabs)/new-game');
               }}
             />
-            <View style={{ marginTop: 10 }}>
-              <Button 
+            <View style={{ marginTop: Spacing.sm }}>
+              <GameButton 
                 title="Close" 
                 onPress={() => setShowWinPopup(false)}
+                variant="outline"
               />
             </View>
           </Animated.View>
