@@ -1,38 +1,30 @@
-import { View, Text } from 'react-native';
-import { useRouter } from 'expo-router';
-import { GameButton } from '../../components/GameButton';
-import { Colors, CommonStyles, Spacing, FontSizes } from '../../constants/Styles';
+import { View } from "react-native";
+import { useRouter } from "expo-router";
+import { Button } from "../../components/Button";
+import { CommonStyles } from "../../constants/Styles";
+import { $puzzleList, puzzleSelected } from "@/model/sudoku.model";
+import { useUnit } from "effector-react";
 
 export default function NewGame() {
   const router = useRouter();
 
+  const puzzleList = useUnit($puzzleList);
+
   return (
     <View style={[CommonStyles.container, CommonStyles.screenContainer]}>
-      <Text style={{ 
-        fontSize: FontSizes.xxlarge, 
-        marginBottom: Spacing.xl, 
-        color: Colors.black,
-        fontWeight: 'bold'
-      }}>
-        New Game
-      </Text>
-      
-      <View style={{ gap: Spacing.md }}>
-        <GameButton 
-          title="4x4 Easy" 
-          onPress={() => router.push('/game')}
-        />
-        <GameButton 
-          title="6x6 Medium" 
-          onPress={() => router.push('/game')}
-          variant="secondary"
-        />
-        <GameButton 
-          title="9x9 Hard" 
-          onPress={() => router.push('/game')}
-          variant="outline"
-        />
-      </View>
+      <Button
+        onPress={() => {
+          puzzleSelected({
+            puzzle: puzzleList.classic9.easy[0],
+            layout: "classic9",
+            solution: puzzleList.classic9.easy[0],
+          });
+
+          router.push("/game");
+        }}
+      >
+        New game
+      </Button>
     </View>
   );
 }
