@@ -2,6 +2,7 @@ import { PRIMARY_COLOR } from "@/model/config";
 import { Pressable, Text, StyleSheet } from "react-native";
 
 type Props = {
+  disabled?: boolean;
   selected?: boolean;
   children?: string | number;
   title?: string | number;
@@ -11,6 +12,7 @@ type Props = {
 };
 
 export function Button({
+  disabled,
   children,
   onPress,
   onLongPress,
@@ -22,10 +24,15 @@ export function Button({
     <Pressable
       onPress={onPress}
       onLongPress={onLongPress}
-      style={[styles.button, selected && styles.selected, { width }]}
+      style={[
+        styles.button,
+        disabled && styles.disabled,
+        selected && styles.selected,
+        { width },
+      ]}
     >
       <Text style={[styles.text, selected && styles.textSelected]}>
-        {children || title || "-----"}
+        {children || title || "--"}
       </Text>
     </Pressable>
   );
@@ -41,6 +48,9 @@ const styles = StyleSheet.create({
   },
   selected: {
     backgroundColor: PRIMARY_COLOR,
+  },
+  disabled: {
+    opacity: 0.5,
   },
   text: {
     color: PRIMARY_COLOR,

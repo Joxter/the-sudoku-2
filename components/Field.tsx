@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Dimensions, StyleSheet } from "react-native";
+import { View, Dimensions, StyleSheet, Text, Pressable } from "react-native";
 import { useUnit } from "effector-react";
 import { Cell } from "./Cell";
 import {
@@ -44,52 +44,59 @@ export function Field() {
     return configs[layout];
   };
 
-  console.log("----");
-  console.log(candidates);
-  console.log(field);
-  console.log(puzzle);
-
-  if (!candidates || !field || !puzzle) return null;
+  if (!candidates || !field || !puzzle) {
+    return <Text>No candidates or field or puzzle</Text>;
+  }
 
   return (
     <View style={[styles.field, { width: getLayoutWidth(puzzle.layout) }]}>
-      {/* Borders */}
       {Layouts[puzzle.layout].schema
         .getBorders(borderSize, cellSize)
-        .map((b, i) => (
-          <View
-            key={i}
-            style={[
-              styles.darkBorder,
-              {
-                position: "absolute",
-                left: b.left,
-                top: b.top,
-                width: b.width,
-                height: b.height,
-              },
-            ]}
-          />
-        ))}
+        .map((b, i) => {
+          return (
+            <Pressable
+              key={i}
+              onPress={(ev) => {
+                console.log(b);
+              }}
+              style={[
+                styles.darkBorder,
+                {
+                  position: "absolute",
+                  left: b.left,
+                  top: b.top,
+                  width: b.width,
+                  height: b.height,
+                },
+              ]}
+            />
+          );
+        })}
 
-      <View style={styles.cellsContainer}>
-        {field.map((value, index) => (
-          <Cell
-            key={index}
-            style={{
-              width: cellSize,
-              height: cellSize,
-            }}
-            candidates={candidates[index]}
-            index={index}
-            isPuzzle={puzzle.puzzle[index] !== 0}
-            isCurrent={current === index}
-            isSame={lastNumber !== null && lastNumber === value}
-            isHighLight={false && highLightCells.includes(index)}
-            value={value}
-            onPress={() => cellClicked(index)}
-          />
-        ))}
+      <View style={[styles.cellsContainer]}>
+        {field.map((value, index) => {
+          return (
+            <Cell
+              key={index}
+              style={{
+                width: cellSize,
+                height: cellSize,
+              }}
+              candidates={candidates[index]}
+              index={index}
+              isPuzzle={puzzle.puzzle[index] !== 0}
+              isCurrent={current === index}
+              isSame={lastNumber !== null && lastNumber === value}
+              isHighLight={false && highLightCells.includes(index)}
+              value={value}
+              onPress={() => {
+                console.log(index);
+
+                cellClicked(index);
+              }}
+            />
+          );
+        })}
       </View>
     </View>
   );

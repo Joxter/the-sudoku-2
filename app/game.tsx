@@ -22,6 +22,7 @@ export default function Game() {
         ]}
       >
         <Button
+          disabled
           onPress={() => {
             console.log("tools");
           }}
@@ -30,7 +31,16 @@ export default function Game() {
         </Button>
         <Text>12:43</Text>
       </View>
-      <Field />
+      <View
+        style={[
+          {
+            flexDirection: "row",
+            justifyContent: "center",
+          },
+        ]}
+      >
+        <Field />
+      </View>
       <FooterControls />
     </ScrollView>
   );
