@@ -4,6 +4,7 @@ import { Button } from "../../components/Button";
 import { CommonStyles } from "../../constants/Styles";
 import { $puzzleList, puzzleSelected } from "@/model/sudoku.model";
 import { useUnit } from "effector-react";
+import { randomFrom } from "@/model/utils";
 
 export default function NewGame() {
   const router = useRouter();
@@ -14,10 +15,12 @@ export default function NewGame() {
     <View style={[CommonStyles.container, CommonStyles.screenContainer]}>
       <Button
         onPress={() => {
+          const p = randomFrom(puzzleList.classic9.easy);
+
           puzzleSelected({
-            puzzle: puzzleList.classic9.easy[0],
+            puzzle: p,
             layout: "classic9",
-            solution: puzzleList.classic9.easy[0],
+            solution: p,
           });
 
           router.push("/game");
