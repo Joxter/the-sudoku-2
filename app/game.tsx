@@ -3,6 +3,7 @@ import { useRouter } from "expo-router";
 import { Button } from "../components/Button";
 import { Field } from "@/components/Field";
 import { FooterControls } from "@/components/FooterControls";
+import { WinModal } from "@/components/Components";
 
 export default function Game() {
   const router = useRouter();
@@ -39,6 +40,7 @@ export default function Game() {
           },
         ]}
       >
+        <WinModal />
         <Field />
       </View>
       <FooterControls />

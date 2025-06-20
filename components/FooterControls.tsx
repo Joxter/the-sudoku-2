@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { useUnit } from "effector-react";
 import {
   $currentCell,
@@ -7,23 +7,16 @@ import {
   undo,
   redo,
   $field,
-  inputModeChanged,
-  $inputMode,
   revealNumber,
   $solved,
-  pencilPressed,
+  pencilNumberPressed,
 } from "../model/sudoku.model";
 import { Button } from "./Button";
 import { NumberButton } from "./NumberButton";
 import { useLocale } from "../locale/locale.model";
 
 export function FooterControls() {
-  const [solved, field, current, inputMode] = useUnit([
-    $solved,
-    $field,
-    $currentCell,
-    $inputMode,
-  ]);
+  const [solved, field, current] = useUnit([$solved, $field, $currentCell]);
 
   const locale = useLocale();
   const fieldPadding = 12;
@@ -46,7 +39,7 @@ export function FooterControls() {
               variant="pencil"
               key={n}
               width={33}
-              onPress={() => pencilPressed(n)}
+              onPress={() => pencilNumberPressed(n)}
             >
               {n}
             </NumberButton>

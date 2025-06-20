@@ -64,7 +64,6 @@ export const $allHistory = createStore<History[]>([]);
 
 export const $currentCell = createStore<number | null>(null);
 export const $lastNumber = createStore<number | null>(null);
-export const $inputMode = createStore<"normal" | "candidate">("normal");
 export const $highLightCells = $currentCell.map((ind) =>
   getHighlightCells(Layouts.classic9.schema, ind),
 );
@@ -93,17 +92,32 @@ export const initSudoku =
   createEvent<[string | null, History[], Layout | null]>();
 
 // gameplay
-export const arrowClicked = createEvent<string>();
-export const cellClicked = createEvent<number | null>();
+export const cellClicked = createEvent<number | null>(); // select cell on a field
 export const revealNumber = createEvent<{ pos: number; number: number }>();
 export const numberPressed = createEvent<number>();
-export const pencilPressed = createEvent<number>();
-export const userAction = createEvent<Action>();
+export const pencilNumberPressed = createEvent<number>();
 export const showCellError = createEvent<number[]>();
-
-$inputMode.on(inputModeChanged, (_, s) => s);
+const makeMove = createEvent<Action>();
 
 export const $solved = $puzzle.map((it) => it?.solution || null);
+
+sample({
+  clock: revealNumber,
+  fn: ({ pos, number }) => {
+    return { cell: pos, value: number, type: "reveal-cell" as const };
+  },
+  target: makeMove,
+});
+
+sample({
+  source: $currentCell,
+  clock: pencilNumberPressed,
+  filter: $currentCell.map((it) => it !== null),
+  fn: (cell, value) => {
+    return { cell: cell!, value, type: "edit-candidate" as const };
+  },
+  target: makeMove,
+});
 
 sample({
   source: $currentCell,
@@ -112,44 +126,12 @@ sample({
   fn: (cell, value) => {
     return { cell: cell!, value, type: "edit-cell" as const };
   },
-  target: userAction,
-});
-
-sample({
-  clock: revealNumber,
-  fn: ({ pos, number }) => {
-    return { cell: pos, value: number, type: "reveal-cell" as const };
-  },
-  target: userAction,
-});
-
-sample({
-  source: $currentCell,
-  clock: pencilPressed,
-  filter: $currentCell.map((it) => it !== null),
-  fn: (cell, value) => {
-    return { cell: cell!, value, type: "edit-candidate" as const };
-  },
-  target: userAction,
-});
-
-sample({
-  source: $currentCell,
-  clock: numberPressed,
-  filter: combine(
-    $currentCell,
-    $inputMode,
-    (cell, mode) => cell !== null && mode === "candidate",
-  ),
-  fn: (cell, value) => {
-    return { cell: cell!, value, type: "edit-candidate" as const };
-  },
-  target: userAction,
+  target: makeMove,
 });
 
 sample({
   source: [$puzzle, $currentLogs] as const,
-  clock: userAction,
+  clock: makeMove,
   fn: ([puzzle, history], action) => {
     return { puzzle, history: history!, action };
   },
@@ -216,22 +198,7 @@ $puzzle.on(puzzleSelected, (_, p) => p);
 //   return puzzle && layout ? { puzzle, layout } : state;
 // });
 
-$currentCell
-  .on(cellClicked, (_, n) => n)
-  .on(arrowClicked, (current, dir) => {
-    if (current === null) return null;
-    let newPos = {
-      ArrowUp: current - 9,
-      ArrowDown: current + 9,
-      ArrowLeft: current - 1,
-      ArrowRight: current + 1,
-    }[dir];
-
-    if (newPos !== undefined && newPos >= 0 && newPos < 81) {
-      return newPos;
-    }
-    return null;
-  });
+$currentCell.on(cellClicked, (_, n) => n);
 
 sample({
   source: $currentLogs,
@@ -246,10 +213,6 @@ sample({
   // console.log("SAVED", logs);
   if (logs) saveHistoryToLS(logs);
 });
-
-// $candidates.watch(console.log);
-// $field.watch(console.log);
-// $currentLogs.watch(console.log);
 
 export const $field = $currentLogs.map((history) => {
   return history ? applyStepsForNumbers(history) : null;
@@ -267,6 +230,16 @@ export const $isWin = $field.map(
 export const payerWins = $isWin.updates.filter({
   fn: (isWin) => !!isWin,
 });
+
+// $isWin.watch((v) => {
+//   console.log("$isWin", v);
+// });
+// openWinModal.watch(() => {
+//   console.log("openWinModal");
+// });
+// payerWins.watch(() => {
+//   console.log("payerWins");
+// });
 
 sample({ clock: payerWins, target: openWinModal });
 
