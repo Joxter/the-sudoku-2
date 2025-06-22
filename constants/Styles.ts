@@ -11,6 +11,7 @@ export const Colors = {
   border: '#C6C6C8',
   error: '#FF3B30',
   success: '#34C759',
+  red: '#FF3B30',
 };
 
 export const Spacing = {

@@ -72,6 +72,34 @@ const changeCellFx = createEffect<ChangeCellProps, History | null, number[]>(
   changeCellEffectHandler,
 );
 
+const loadSavedHistoryFx = createEffect<{
+  puzzle: Field;
+  layout: Layout;
+}, History>(async ({ puzzle, layout }) => {
+  const savedHistory = await getSavedFromLS();
+  const currentLogs = savedHistory.find((it) => 
+    it.puzzle.join("") === puzzle.join("")
+  );
+
+  if (currentLogs) {
+    return currentLogs;
+  } else {
+    return {
+      layout,
+      puzzle,
+      current: -1,
+      steps: [],
+      time: 0,
+      started: Date.now(),
+      lastStepTime: Date.now(),
+    };
+  }
+});
+
+const saveHistoryFx = createEffect<History, boolean>(async (history) => {
+  return await saveHistoryToLS(history);
+});
+
 export const undo = createEvent();
 export const redo = createEvent();
 export const inputModeChanged = createEvent<"normal" | "candidate">();
@@ -166,25 +194,7 @@ $currentLogs
   //   let current = allHistory.find((it) => it.puzzle === initPuzzle);
   //   return current || state;
   // })
-  .on(puzzleSelected, (_, { puzzle, layout }): History => {
-    let savedHistory = getSavedFromLS();
-
-    let currentLogs = savedHistory.find((it) => it.puzzle === puzzle);
-
-    if (currentLogs) {
-      return currentLogs;
-    } else {
-      return {
-        layout,
-        puzzle,
-        current: -1,
-        steps: [],
-        time: 0,
-        started: Date.now(),
-        lastStepTime: Date.now(),
-      };
-    }
-  })
+  .on(loadSavedHistoryFx.doneData, (_, history) => history)
   .reset(resetClicked);
 
 $allHistory.on(initSudoku, (_state, [, allHistory]) => {
@@ -201,17 +211,24 @@ $puzzle.on(puzzleSelected, (_, p) => p);
 $currentCell.on(cellClicked, (_, n) => n);
 
 sample({
+  clock: puzzleSelected,
+  fn: ({ puzzle, layout }) => ({ puzzle, layout }),
+  target: loadSavedHistoryFx,
+});
+
+sample({
   source: $currentLogs,
   clock: [
     changeCellFx.doneData,
-    puzzleSelected,
+    loadSavedHistoryFx.doneData,
     resetClicked,
-    // userAction.filter({ fn: ({ type }) => type === "edit-candidate" }),
+    undo,
+    redo,
     seveToPuzzleToLS,
   ],
+  filter: (logs) => logs !== null,
 }).watch((logs) => {
-  // console.log("SAVED", logs);
-  if (logs) saveHistoryToLS(logs);
+  if (logs) saveHistoryFx(logs);
 });
 
 export const $field = $currentLogs.map((history) => {

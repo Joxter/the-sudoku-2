@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { isInvalid } from "./lib/sudoku-solver";
 import {
   Action,
@@ -6,8 +7,8 @@ import {
   Field,
   History,
   Layout,
-  // LS_HISTORY_KEY,
-  // WinsPersistent,
+  LS_HISTORY_KEY,
+  WinsPersistent,
 } from "./types";
 import { Difficulty } from "./lib";
 import {
@@ -141,17 +142,14 @@ export function viewCandidates(candidates: number): number[] {
     .filter((n) => n > 0);
 }
 
-export function getWinsFromLS() {
-  console.warn("getWinsFromLS. not implemented");
-  return;
-
-  // try {
-  //   let wins: WinsPersistent = JSON.parse(localStorage.getItem("sudoku-wins")!);
-  //   return wins || {};
-  // } catch (err) {
-  //   console.error(err);
-  //   return {};
-  // }
+export async function getWinsFromLS(): Promise<WinsPersistent> {
+  try {
+    const wins = await AsyncStorage.getItem("sudoku-wins");
+    return wins ? JSON.parse(wins) : {};
+  } catch (err) {
+    console.error(err);
+    return {};
+  }
 }
 
 export const difToLocale = {
@@ -162,55 +160,67 @@ export const difToLocale = {
   [DIFFICULTY_MASTER]: "5",
 } as const;
 
-export function saveWinToLS(puzzle: string) {
-  console.warn("saveWinToLS. not implemented");
-  return;
-
-  // try {
-  //   let wins = getWinsFromLS();
-  //
-  //   wins[puzzle] = { win: true, winDate: Date.now() };
-  //   localStorage.setItem(`sudoku-wins`, JSON.stringify(wins));
-  //   return true;
-  // } catch (err) {
-  //   console.error(err);
-  //   return false;
-  // }
+export async function saveWinToLS(puzzle: string): Promise<boolean> {
+  try {
+    const wins = await getWinsFromLS();
+    wins[puzzle] = { win: true, winDate: Date.now() };
+    await AsyncStorage.setItem("sudoku-wins", JSON.stringify(wins));
+    return true;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
 }
 
-export function saveHistoryToLS(history: History) {
-  console.warn("saveHistoryToLS. not implemented");
-  return;
+export async function saveHistoryToLS(history: History): Promise<boolean> {
+  try {
+    const saved = await getSavedFromLS();
+    const rewriteIndex = saved.findIndex(
+      (it) => it.puzzle.join("") === history.puzzle.join(""),
+    );
 
-  // try {
-  //   let saved = getSavedFromLS();
-  //
-  //   let rewriteIndex = saved.findIndex((it) => history.puzzle === it.puzzle);
-  //   if (rewriteIndex > -1) {
-  //     saved[rewriteIndex] = history;
-  //   } else {
-  //     saved.push(history);
-  //   }
-  //
-  //   localStorage.setItem(LS_HISTORY_KEY, JSON.stringify(saved));
-  //   return true;
-  // } catch (err) {
-  //   console.error(err);
-  //   return false;
-  // }
+    if (rewriteIndex > -1) {
+      saved[rewriteIndex] = history;
+    } else {
+      saved.push(history);
+    }
+
+    await AsyncStorage.setItem(LS_HISTORY_KEY, JSON.stringify(saved));
+    return true;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
 }
 
-export function resetLS() {
-  console.warn("resetLS. not implemented");
+export async function resetLS(): Promise<void> {
+  try {
+    await AsyncStorage.removeItem(LS_HISTORY_KEY);
+    await AsyncStorage.removeItem("sudoku-wins");
+  } catch (err) {
+    console.error("Error resetting localStorage:", err);
+  }
 }
 
-export function removeFromHistoryLS(puzzle: string) {
-  console.warn("removeFromHistoryLS. not implemented");
+export async function removeFromHistoryLS(puzzle: string): Promise<void> {
+  try {
+    const saved = await getSavedFromLS();
+    const filtered = saved.filter((it) => it.puzzle.join("") !== puzzle);
+    await AsyncStorage.setItem(LS_HISTORY_KEY, JSON.stringify(filtered));
+  } catch (err) {
+    console.error("Error removing from history:", err);
+  }
 }
 
-export function getSavedFromLS(): History[] {
-  console.warn("getSavedFromLS. not implemented");
-  return [];
+export async function getSavedFromLS(): Promise<History[]> {
+  try {
+    const saved = await AsyncStorage.getItem(LS_HISTORY_KEY);
+    // console.log(saved);
+    return saved ? JSON.parse(saved) : [];
+  } catch (err) {
+    console.error("Error getting saved history:", err);
+    return [];
+  }
 }
 
 export function getHighlightCells(
