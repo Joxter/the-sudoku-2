@@ -1,6 +1,6 @@
 import { View, Text, FlatList, Alert } from "react-native";
-import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useRouter, useFocusEffect } from "expo-router";
+import { useEffect, useState, useCallback } from "react";
 import {
   Colors,
   CommonStyles,
@@ -18,13 +18,16 @@ export default function History() {
   const [savedGames, setSavedGames] = useState<HistoryType[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadSavedGames();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      loadSavedGames();
+    }, []),
+  );
 
   const loadSavedGames = async () => {
     try {
       const games = await getSavedFromLS();
+      console.log("Loaded games from storage:", games.length);
       setSavedGames(
         games.sort((a, b) => (b.lastStepTime || 0) - (a.lastStepTime || 0)),
       );
@@ -69,11 +72,7 @@ export default function History() {
   };
 
   const getGameProgress = (game: HistoryType) => {
-    const totalCells = game.puzzle.filter((n) => n === 0).length;
-    const filledCells = game.steps.filter(
-      (step) => step.type === "edit-cell" && step.cell <= game.current,
-    ).length;
-    return Math.round((filledCells / totalCells) * 100);
+    return game.steps.length;
   };
 
   const renderGameItem = ({ item }: { item: HistoryType }) => {
@@ -112,7 +111,7 @@ export default function History() {
                 marginTop: 2,
               }}
             >
-              Progress: {getGameProgress(item)}% • Time: {formatTime(item.time)}
+              Steps: {getGameProgress(item)} • Time: {formatTime(item.time)}
             </Text>
             <Text style={{ fontSize: FontSizes.small, color: Colors.gray }}>
               Last played:{" "}
@@ -148,16 +147,21 @@ export default function History() {
     );
   }
 
-  // console.log(savedGames);
+  console.log("History component state:", {
+    loading,
+    savedGamesLength: savedGames.length,
+    savedGames: savedGames.slice(0, 2), // Show first 2 for debugging
+  });
 
   return (
-    <View style={[CommonStyles.container, CommonStyles.screenContainer]}>
+    <View style={[CommonStyles.container, { padding: Spacing.lg }]}>
       <Text
         style={{
           fontSize: FontSizes.xxlarge,
           marginBottom: Spacing.lg,
           color: Colors.black,
           fontWeight: "bold",
+          textAlign: "center",
         }}
       >
         History
@@ -184,39 +188,10 @@ export default function History() {
           renderItem={renderGameItem}
           keyExtractor={(item, index) => `${item.puzzle.join("")}_${index}`}
           showsVerticalScrollIndicator={false}
+          style={{ flex: 1 }}
+          contentContainerStyle={{ paddingBottom: Spacing.lg }}
         />
       )}
     </View>
   );
 }
-
-let a = [
-  {
-    current: 3,
-    lastStepTime: 1750585100715,
-    layout: "classic9",
-    puzzle: [
-      0, 3, 0, 6, 2, 1, 0, 5, 0, 0, 0, 0, 7, 3, 0, 0, 0, 0, 0, 4, 0, 0, 9, 0, 0,
-      0, 7, 9, 0, 0, 0, 0, 5, 0, 0, 4, 0, 0, 0, 4, 7, 2, 0, 1, 6, 0, 2, 0, 0, 0,
-      9, 0, 3, 0, 2, 1, 0, 0, 0, 0, 0, 7, 0, 4, 0, 0, 0, 0, 0, 0, 2, 3, 0, 0, 6,
-      2, 5, 0, 0, 0, 0,
-    ],
-    started: 1750585094697,
-    steps: [[Object], [Object], [Object], [Object]],
-    time: 0,
-  },
-  {
-    current: 5,
-    lastStepTime: 1750585076848,
-    layout: "classic9",
-    puzzle: [
-      0, 0, 8, 0, 0, 0, 0, 0, 1, 0, 0, 9, 0, 0, 6, 0, 0, 7, 5, 1, 0, 0, 0, 2, 0,
-      9, 0, 6, 4, 0, 0, 1, 0, 0, 5, 0, 0, 0, 5, 4, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 3, 0, 0, 0, 0, 3, 8, 0, 1, 0, 4, 0, 0, 6, 0, 9, 4, 8, 0, 0, 8, 0, 4,
-      0, 0, 0, 3, 7, 9,
-    ],
-    started: 1750585042977,
-    steps: [[Object], [Object], [Object], [Object], [Object], [Object]],
-    time: 0,
-  },
-];

@@ -72,13 +72,16 @@ const changeCellFx = createEffect<ChangeCellProps, History | null, number[]>(
   changeCellEffectHandler,
 );
 
-const loadSavedHistoryFx = createEffect<{
-  puzzle: Field;
-  layout: Layout;
-}, History>(async ({ puzzle, layout }) => {
+const loadSavedHistoryFx = createEffect<
+  {
+    puzzle: Field;
+    layout: Layout;
+  },
+  History
+>(async ({ puzzle, layout }) => {
   const savedHistory = await getSavedFromLS();
-  const currentLogs = savedHistory.find((it) => 
-    it.puzzle.join("") === puzzle.join("")
+  const currentLogs = savedHistory.find(
+    (it) => it.puzzle.join("") === puzzle.join(""),
   );
 
   if (currentLogs) {
@@ -97,7 +100,8 @@ const loadSavedHistoryFx = createEffect<{
 });
 
 const saveHistoryFx = createEffect<History, boolean>(async (history) => {
-  return await saveHistoryToLS(history);
+  const result = await saveHistoryToLS(history);
+  return result;
 });
 
 export const undo = createEvent();
