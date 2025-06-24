@@ -8,7 +8,12 @@ import {
   FontSizes,
 } from "../../constants/Styles";
 import { Button } from "@/components/Button";
-import { getSavedFromLS, removeFromHistoryLS, formatTime } from "@/model/utils";
+import {
+  getSavedFromLS,
+  removeFromHistoryLS,
+  formatTime,
+  applyStepsForNumbers,
+} from "@/model/utils";
 import { History as HistoryType } from "@/model/types";
 import { puzzleSelected } from "@/model/sudoku.model";
 import { fastSolve } from "@/model/lib/sudoku-solver";
@@ -76,6 +81,10 @@ export default function History() {
   };
 
   const renderGameItem = ({ item }: { item: HistoryType }) => {
+    const unsolvedCnt = applyStepsForNumbers(item).filter(
+      (it) => it === 0,
+    ).length;
+
     return (
       <View
         style={{
@@ -111,7 +120,8 @@ export default function History() {
                 marginTop: 2,
               }}
             >
-              Steps: {getGameProgress(item)} • Time: {formatTime(item.time)}
+              {unsolvedCnt === 0 ? "WON!" : `Zeros: ${unsolvedCnt}`} • Time:{" "}
+              {formatTime(item.time)}
             </Text>
             <Text style={{ fontSize: FontSizes.small, color: Colors.gray }}>
               Last played:{" "}
@@ -121,16 +131,10 @@ export default function History() {
             </Text>
           </View>
           <View style={{ gap: Spacing.xs }}>
-            <Button
-              title="Continue"
-              onPress={() => continueGame(item)}
-              style={{ minWidth: 80 }}
-            />
-            <Button
-              title="Delete"
-              onPress={() => deleteGame(item)}
-              style={{ minWidth: 80, backgroundColor: Colors.red }}
-            />
+            {unsolvedCnt > 0 && (
+              <Button title="Continue" onPress={() => continueGame(item)} />
+            )}
+            <Button title="Delete" onPress={() => deleteGame(item)} />
           </View>
         </View>
       </View>
@@ -146,12 +150,6 @@ export default function History() {
       </View>
     );
   }
-
-  console.log("History component state:", {
-    loading,
-    savedGamesLength: savedGames.length,
-    savedGames: savedGames.slice(0, 2), // Show first 2 for debugging
-  });
 
   return (
     <View style={[CommonStyles.container, { padding: Spacing.lg }]}>
