@@ -32,7 +32,7 @@ import { Difficulty } from "./lib";
 // const simple4sudoku = "0100300140020040".split("").map((it) => +it);
 
 export const $puzzleList = createStore<
-  Record<Layout, Record<Difficulty, Field[]>>
+  Record<Layout, Record<Difficulty, { puzzle: Field; solution: Field }[]>>
 >({
   classic9: getPuzzles(),
   // simple6: {

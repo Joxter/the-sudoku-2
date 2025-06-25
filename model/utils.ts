@@ -133,6 +133,10 @@ export function randomFrom<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+export function randomInt(to: number) {
+  return Math.floor(Math.random() * to);
+}
+
 export function viewCandidates(candidates: number): number[] {
   return candidates
     .toString(2)
