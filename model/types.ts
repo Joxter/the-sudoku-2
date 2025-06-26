@@ -32,8 +32,7 @@ export type ChangeCellProps = {
 
 export const LS_HISTORY_KEY = "sudoku-history";
 
-// export const ValidLayouts = ["classic9", "simple6", "simple4"] as const;
-export const ValidLayouts = ["classic9"] as const;
+export const ValidLayouts = ["classic9", "simple6", "simple4"] as const;
 
 export type Layout = (typeof ValidLayouts)[number];
 

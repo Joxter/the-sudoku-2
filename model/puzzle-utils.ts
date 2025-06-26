@@ -1,9 +1,6 @@
 type Index = number;
 type Field = number[];
 
-// init: string[]; // givens
-// answer: string[];
-
 export type MyPuzzle = {
   power: number;
   //
@@ -28,8 +25,7 @@ export type MyPuzzle = {
   isInvalid: (field: number[]) => false | Index[];
   solve: (field: number[]) => Field | null;
 
-  // todo:
-  //  - width: (cellSize) => number
+  renderAsString: (puzzle: string | Field) => string;
 };
 
 export function generateFromSchema(schema: string): MyPuzzle {
@@ -191,6 +187,9 @@ export function generateFromSchema(schema: string): MyPuzzle {
     relatedByIndex,
     isInvalid,
     solve: fastSolve,
+    renderAsString: (puzzle: string | Field): string => {
+      return rows.map((row) => row.map((i) => puzzle[i]).join("")).join("\n");
+    },
   };
 }
 

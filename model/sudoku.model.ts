@@ -1,10 +1,4 @@
-import {
-  combine,
-  createEffect,
-  createEvent,
-  createStore,
-  sample,
-} from "effector";
+import { createEffect, createEvent, createStore, sample } from "effector";
 import {
   Action,
   ChangeCellProps,
@@ -20,35 +14,15 @@ import {
   getSavedFromLS,
   getHighlightCells,
   saveHistoryToLS,
-  saveWinToLS,
-  fastSolve,
 } from "./utils";
-import { getPuzzles } from "./puzzles/puzzles";
+import { getPuzzles, getPuzzles4 } from "./puzzles/puzzles";
 import { Difficulty } from "./lib";
-
-// const simple6sudoku = "030400005603000100010305064031001046"
-//   .split("")
-//   .map((it) => +it);
-// const simple4sudoku = "0100300140020040".split("").map((it) => +it);
 
 export const $puzzleList = createStore<
   Record<Layout, Record<Difficulty, { puzzle: Field; solution: Field }[]>>
 >({
   classic9: getPuzzles(),
-  // simple6: {
-  //   easy: [simple6sudoku],
-  //   medium: [simple6sudoku],
-  //   hard: [simple6sudoku],
-  //   expert: [simple6sudoku],
-  //   master: [simple6sudoku],
-  // },
-  // simple4: {
-  //   easy: [simple4sudoku],
-  //   medium: [simple4sudoku],
-  //   hard: [simple4sudoku],
-  //   expert: [simple4sudoku],
-  //   master: [simple4sudoku],
-  // },
+  simple4: getPuzzles4(),
 } as const);
 
 export const $currentLayout = createStore<Layout>("classic9");

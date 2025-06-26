@@ -1,5 +1,27 @@
 import { Difficulty } from "../lib";
-import { Field } from "../types";
+import { DIFFICULTY_EASY, DIFFICULTY_MEDIUM } from "../lib/constants";
+import { Field, Layouts } from "../types";
+
+let all6 = [];
+
+let aaaa = JSON.stringify(
+  all6.map((it) => {
+    let time = Date.now();
+    const solution = Layouts.simple6.schema.solve(
+      it.puzzle.split("").map((it) => +it),
+    );
+
+    return {
+      difficulty:
+        it.difficulty === "Star1" ? DIFFICULTY_EASY : DIFFICULTY_MEDIUM,
+      puzzle: it.puzzle,
+      solution: solution?.join("") || "",
+      solveTime: Date.now() - time,
+    };
+  }),
+);
+
+// console.log(aaaa);
 
 export function getPuzzles(): Record<
   Difficulty,
@@ -3236,6 +3258,840 @@ export function getPuzzles(): Record<
       return { puzzle: transform(it.puzzle), solution: transform(it.solution) };
     }),
     master: all.master.map((it) => {
+      return { puzzle: transform(it.puzzle), solution: transform(it.solution) };
+    }),
+  };
+}
+
+export function getPuzzles4(): Partial<
+  Record<Difficulty, { puzzle: Field; solution: Field }[]>
+> {
+  const all = {
+    easy: [
+      {
+        difficulty: "easy",
+        puzzle: "2100032000041000",
+        solution: "2143432132141432",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "1034030020000001",
+        solution: "1234431221433421",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0012010300004020",
+        solution: "3412214312344321",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0230030000012040",
+        solution: "1234431234212143",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "4200100001200003",
+        solution: "4231134231242413",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0003400001303020",
+        solution: "1243431221343421",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0320000410000012",
+        solution: "4321213412433412",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0200002030402001",
+        solution: "4213132431422431",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0001400220040023",
+        solution: "3241413223141423",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "4000000220140400",
+        solution: "4231314223141423",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0210003201002001",
+        solution: "3214143241232341",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "4021000300000230",
+        solution: "4321214334121234",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "2403000003400001",
+        solution: "2413312413424231",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "4000034004300104",
+        solution: "4213134224313124",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0012200000044300",
+        solution: "3412214312344321",
+        solveTime: 1,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "4000004001202003",
+        solution: "4231134231242413",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "3000000201030021",
+        solution: "3214143221434321",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0002020003040120",
+        solution: "1432324123144123",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "3001100001230000",
+        solution: "3241143241232314",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0030230010003004",
+        solution: "4132234114233214",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0300102000404001",
+        solution: "2314142331424231",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0001120004000130",
+        solution: "4321124334122134",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0030010440031040",
+        solution: "2431312442131342",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0003430201200000",
+        solution: "1243431231242431",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0300200002014002",
+        solution: "1324241332414132",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "1040001201004001",
+        solution: "1243341221344321",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0040103001040003",
+        solution: "2341143231244213",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0010020040202004",
+        solution: "3412124343212134",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0300400012303000",
+        solution: "2341412312343412",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0003040200211000",
+        solution: "2143341243211234",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0201043000044000",
+        solution: "3241143223144123",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0001040043120000",
+        solution: "3241142343122134",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "2001004001000203",
+        solution: "2431134231244213",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "4301020001030010",
+        solution: "4321123421433412",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0430024000000103",
+        solution: "1432324123144123",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "3002003102000004",
+        solution: "3142243142131324",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "2040300000044200",
+        solution: "2143341213244231",
+        solveTime: 1,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "1000402101040000",
+        solution: "1243432121343412",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0043040041000010",
+        solution: "1243342141322314",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0004140002000140",
+        solution: "2314142342313142",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0200003000044120",
+        solution: "3241143223144123",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "2000314002100000",
+        solution: "2431314242131324",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0020104000040402",
+        solution: "4321124321343412",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0340400000101023",
+        solution: "2341413232141423",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "2040300013000001",
+        solution: "2143341213244231",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0200100230040010",
+        solution: "4231134231242413",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "4000002001002401",
+        solution: "4213132431422431",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0040420000230300",
+        solution: "3142423114232314",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "2400002040010300",
+        solution: "2413312442311342",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "1300003000042003",
+        solution: "1342423131242413",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0201300404000002",
+        solution: "4231312424131342",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0001400004020034",
+        solution: "2341412334121234",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0020010030020034",
+        solution: "4321214334121234",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "2003100001300040",
+        solution: "2413132441323241",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0300010030101020",
+        solution: "2341413232141423",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0201034000000104",
+        solution: "4231134224133124",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "0004300100100240",
+        solution: "2134342143121243",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "3000400000011023",
+        solution: "3214413223411423",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "1000301000040320",
+        solution: "1243341221344321",
+        solveTime: 1,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "4000001002400021",
+        solution: "4132231412433421",
+        solveTime: 0,
+      },
+    ],
+    medium: [
+      {
+        difficulty: "medium",
+        puzzle: "3001100000000020",
+        solution: "3241143223144123",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "4000004000030200",
+        solution: "4132234114233214",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0010300003000004",
+        solution: "2413314243211234",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "4003020020400000",
+        solution: "4123321423411432",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0040100002000003",
+        solution: "2341143232144123",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "2000000300000410",
+        solution: "2341412312343412",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0010040020000001",
+        solution: "3214143221434321",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0003030040000010",
+        solution: "1423234141323214",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0200002000034000",
+        solution: "1234342121434312",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "2000000302000010",
+        solution: "2341412312343412",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0400000200000023",
+        solution: "2431134232144123",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0400300000140020",
+        solution: "1432324123144123",
+        solveTime: 1,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0003000430002000",
+        solution: "4213132431422431",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "1000000104000020",
+        solution: "1342423124133124",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0020100004000003",
+        solution: "4321123434122143",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "1400000000000024",
+        solution: "1432234142133124",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0000430220040000",
+        solution: "1243431221343421",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0100002000034000",
+        solution: "2134342112434312",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0004400000100200",
+        solution: "2134432134121243",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0010300003000002",
+        solution: "4213312423411432",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0201002041000000",
+        solution: "3241142341322314",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0003200004000010",
+        solution: "4123234114323214",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "1020000030040000",
+        solution: "1423234132144132",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0100000400302000",
+        solution: "4123321414322341",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0000020000100302",
+        solution: "3124423124131342",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0201000020300000",
+        solution: "3241142321344312",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0100000100020400",
+        solution: "3124423113422413",
+        solveTime: 1,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "2000102000040000",
+        solution: "2341142332144132",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0000020004300010",
+        solution: "4123324114322314",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0002300000100100",
+        solution: "1432324123144123",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "3000040001000002",
+        solution: "3241142321344312",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0000010000202030",
+        solution: "4213314213242431",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0002000040000201",
+        solution: "1432231441233241",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0020030000024000",
+        solution: "1423231431424231",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0002000004103000",
+        solution: "1342423124133124",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0000102004030000",
+        solution: "4231132424133142",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "2000300000200010",
+        solution: "2431314213244213",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "4000002001000001",
+        solution: "4213132431422431",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0001100003000040",
+        solution: "3421123443122143",
+        solveTime: 1,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0200002010000003",
+        solution: "4231312413422413",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0200000420000030",
+        solution: "4213312423411432",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "2400010000010020",
+        solution: "2413314242311324",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0010020000032000",
+        solution: "3412123441232341",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0000010040010002",
+        solution: "2413312442311342",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0000004201002010",
+        solution: "4231134231242413",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "2000043000030020",
+        solution: "2341143242133124",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0003100000400100",
+        solution: "2413132432414132",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0200000310000040",
+        solution: "3214412314322341",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "1004030000100003",
+        solution: "1234432134122143",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0400000200003200",
+        solution: "2431134241233214",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0210000000400300",
+        solution: "3214143221434321",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0240000001003020",
+        solution: "1243431221343421",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0040200001000001",
+        solution: "1342241331244231",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "1000002000030100",
+        solution: "1234432124133142",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0300000310000040",
+        solution: "2314412314323241",
+        solveTime: 1,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0020000310000004",
+        solution: "4321214314323214",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0134000003100000",
+        solution: "2134342143121243",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0300003040000001",
+        solution: "2314143241233241",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "4000003004000002",
+        solution: "4321123424133142",
+        solveTime: 0,
+      },
+      {
+        difficulty: "medium",
+        puzzle: "0004200001000010",
+        solution: "1324243131424213",
+        solveTime: 0,
+      },
+    ],
+  };
+
+  function transform(it: string): Field {
+    return it.split("").map((it) => +it);
+  }
+
+  return {
+    easy: all.easy.map((it) => {
+      return { puzzle: transform(it.puzzle), solution: transform(it.solution) };
+    }),
+    medium: all.medium.map((it) => {
+      return { puzzle: transform(it.puzzle), solution: transform(it.solution) };
+    }),
+  };
+}
+
+export function getPuzzles6(): Partial<
+  Record<Difficulty, { puzzle: Field; solution: Field }[]>
+> {
+  const all = {
+    easy: [
+      {
+        difficulty: "easy",
+        puzzle: "050001004600400050100004043000060240",
+        solution: "652431314625436152125364243516561243",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "504000600035120000000600001003403062",
+        solution: "534216612435126354345621261543453162",
+        solveTime: 1,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "300000000205450600060041002450046002",
+        solution: "325164614235451623263541132456546312",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "502000000020306002001605000206012000",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "034000000024053000400105601200000041",
+        solution: "234516516324153462462135641253325641",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "024006060034500600601503203000000010",
+        solution: "324156165234532641641523213465456312",
+        solveTime: 1,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "000005061040100250206010040001000620",
+        solution: "423165561342134256256413642531315624",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "050002000004004100103200200060041520",
+        solution: "456312312654524136163245235461641523",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "300010020500046000050460004002500003",
+        solution: "365214421536146325253461634152512643",
+        solveTime: 1,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "003600010052020500360000502010100030",
+        solution: "253641614352421563365124532416146235",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "002400040306500240030005000014450000",
+        solution: "362451145326516243234165623514451632",
+        solveTime: 0,
+      },
+      {
+        difficulty: "easy",
+        puzzle: "004600030000340200502060250030000001",
+        solution: "124653635142346215512364251436463521",
+        solveTime: 0,
+      },
+    ],
+  };
+
+  function transform(it: string): Field {
+    return it.split("").map((it) => +it);
+  }
+
+  return {
+    easy: all.easy.map((it) => {
       return { puzzle: transform(it.puzzle), solution: transform(it.solution) };
     }),
   };
