@@ -18,6 +18,13 @@ import {
 import { getPuzzles, getPuzzles4 } from "./puzzles/puzzles";
 import { Difficulty } from "./lib";
 
+type Settings = {
+  hightlightAreas: boolean;
+  hightlightIdenticalNumber: boolean;
+  hightlightUsedNumber: boolean;
+  autoRemoveNotes: boolean;
+};
+
 export const $puzzleList = createStore<
   Record<Layout, Record<Difficulty, { puzzle: Field; solution: Field }[]>>
 >({
@@ -32,6 +39,13 @@ export const $puzzle = createStore<{
   solution: Field;
   layout: Layout;
 } | null>(null);
+
+export const $settings = createStore<Settings>({
+  hightlightAreas: false,
+  hightlightIdenticalNumber: true,
+  hightlightUsedNumber: false,
+  autoRemoveNotes: true,
+});
 
 export const $currentLogs = createStore<History | null>(null);
 export const $allHistory = createStore<History[]>([]);
@@ -85,6 +99,8 @@ export const resetClicked = createEvent();
 export const winClicked = createEvent();
 export const winCloseClicked = createEvent();
 export const seveToPuzzleToLS = createEvent<any>();
+
+export const changeSettings = createEvent<Partial<Settings>>();
 
 export const puzzleSelected = createEvent<{
   puzzle: Field;
@@ -187,6 +203,10 @@ $puzzle.on(puzzleSelected, (_, p) => p);
 // });
 
 $currentCell.on(cellClicked, (_, n) => n);
+
+$settings.on(changeSettings, (s, v) => {
+  return { ...s, ...v };
+});
 
 sample({
   clock: puzzleSelected,
