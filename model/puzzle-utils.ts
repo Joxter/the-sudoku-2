@@ -29,7 +29,6 @@ export type MyPuzzle = {
 };
 
 export function generateFromSchema(schema: string): MyPuzzle {
-  // console.log('generateFromSchema');
   schema = schema.trim();
   let grid = schema.split("\n").map((row) => {
     return row.trim().split("");
