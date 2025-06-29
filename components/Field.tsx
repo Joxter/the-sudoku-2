@@ -9,6 +9,7 @@ import {
   $highLightCells,
   $lastNumber,
   $puzzle,
+  $settings,
   cellClicked,
 } from "../model/sudoku.model";
 import { Layout, Layouts } from "../model/types";
@@ -34,6 +35,8 @@ export function Field() {
       $highLightCells,
       $lastNumber,
     ]);
+
+  const settings = useUnit($settings);
 
   const getLayoutWidth = (layout: Layout) => {
     const configs = {
@@ -86,8 +89,14 @@ export function Field() {
               index={index}
               isPuzzle={puzzle.puzzle[index] !== 0}
               isCurrent={current === index}
-              isSame={lastNumber !== null && lastNumber === value}
-              isHighLight={false && highLightCells.includes(index)}
+              isSame={
+                settings.hightlightIdenticalNumber &&
+                lastNumber !== null &&
+                lastNumber === value
+              }
+              isHighLight={
+                settings.hightlightAreas && highLightCells.includes(index)
+              }
               value={value}
               onPress={() => {
                 console.log(index);
